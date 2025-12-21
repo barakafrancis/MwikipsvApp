@@ -1,4 +1,3 @@
-/* public/styles.css */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #f8f9fa;
@@ -375,4 +374,59 @@ h1 {
     .details-content input {
         width: 55%;
     }
+}
+
+.pencil-btn.editing {
+    background-color: #1a73e8;
+    color: white;
+}
+
+.pencil-btn.editing:hover {
+    background-color: #0d62d9;
+}
+
+/* Submit button save mode */
+.submit-btn.save-mode {
+    background-color: #1a73e8;
+}
+
+.submit-btn.save-mode:hover {
+    background-color: #0d62d9;
+}
+
+/* Edit mode specific styles */
+.edit-input {
+    padding: 0.5rem;
+    border: 2px solid #1a73e8;
+    border-radius: 4px;
+    font-size: 0.95rem;
+    width: 60%;
+    text-align: right;
+    background-color: #fff;
+    transition: all 0.2s ease;
+}
+
+.edit-input:focus {
+    outline: none;
+    border-color: #0d62d9;
+    box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.1);
+}
+
+/* Animation for button text change */
+.submit-btn {
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* Value styling for display mode */
+.details-content .value {
+    text-align: right;
+    flex-grow: 1;
+    color: #666;
+    font-weight: 400;
+}
+
+/* Registration input focus state for better UX */
+#registration:focus {
+    border-color: #1a73e8;
+    box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.1);
 }
