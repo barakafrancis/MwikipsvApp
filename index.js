@@ -1,15 +1,11 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const cors = require('cors');
-
 const app = express();
 const port = process.env.PORT || 3000;
-
-// --- Middleware setup ---
 app.use(express.json());
 app.use(express.static('public'));
 
-// ✅ Configure CORS properly
 app.use(cors({
   origin: 'https://mwikifrontend.vercel.app',
   methods: ['GET', 'POST', 'OPTIONS'],
@@ -17,20 +13,19 @@ app.use(cors({
   credentials: true
 }));
 
-// ✅ Handle preflight requests globally
 app.options('*', cors());
 
-// --- Mock user data ---
+// --- Sample ---
 const users = [
   {
-    username: 'test',
+    username: 'Moses',
     pinHash: bcrypt.hashSync('1234', 10)
   }
 ];
 
-// --- Routes ---
+// --- Api ---
 
-// Login route
+// Login
 app.post('/api/login', async (req, res) => {
   try {
     const { username, pin } = req.body;
@@ -65,7 +60,7 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
-// Forgot password route
+// Forgot password 
 app.post('/api/forgotPassword', (req, res) => {
   try {
     const { username } = req.body;
@@ -79,20 +74,19 @@ app.post('/api/forgotPassword', (req, res) => {
   }
 });
 
-// Vehicle details route
+// Contribution
 app.get('/api/vehicleDetails', (req, res) => {
   try {
     const { registration } = req.query;
 
-    if (registration === 'KAB123C') {
+    if (registration === 'KCA869H') {
       return res.json({
         registration,
         dailyContribution: 500,
         monthlyFee: 2000,
-        insuranceStatus: 'Active'
+        loanrepayment: 1000
       });
     }
-
     res.status(404).json({
       success: false,
       error: 'Vehicle details not found'
@@ -117,7 +111,7 @@ app.post('/api/updateContribution', (req, res) => {
 
     res.json({ success: true });
   } catch (err) {
-    console.error('Update contribution error:', err);
+    console.error('Update error:', err);
     res.status(500).json({ success: false, message: 'Server error' });
   }
 });
