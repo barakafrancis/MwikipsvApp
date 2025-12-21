@@ -1,6 +1,4 @@
-// script.js
-
-// Login Form Handler
+// Login Handling
 if (document.getElementById('loginForm')) {
     const loginForm = document.getElementById('loginForm');
     const forgotPassword = document.getElementById('forgotPassword');
@@ -18,7 +16,7 @@ if (document.getElementById('loginForm')) {
             });
             const data = await response.json();
             if (data.success) {
-                // Redirect to vehicle page on success
+                     //vehiclepage
                 window.location.href = '/vehicle.html';
             } else {
                 alert('Login failed: ' + data.message);
@@ -224,3 +222,4 @@ if (document.getElementById('vehicleForm')) {
         submitBtn.classList.remove('save-mode');
     }
 }
+
