@@ -1,5 +1,3 @@
-// public/script.js
-// For login page
 if (document.getElementById('loginForm')) {
     const loginForm = document.getElementById('loginForm');
     const forgotPassword = document.getElementById('forgotPassword');
@@ -46,7 +44,7 @@ if (document.getElementById('loginForm')) {
     });
 }
 
-// For vehicle page
+
 if (document.getElementById('vehicleForm')) {
     const confirmBtn = document.getElementById('confirmBtn');
     const editBtn = document.getElementById('editBtn');
@@ -129,4 +127,5 @@ if (document.getElementById('vehicleForm')) {
             }
         }
     }
+
 }
