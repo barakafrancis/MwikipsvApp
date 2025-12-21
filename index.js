@@ -5,22 +5,15 @@ const cors = require('cors');
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.use(cors({
-  origin: [
-    'https://mwikifrontend.vercel.app'
-  ],
-  methods: ['GET', 'POST', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: false
-}));
+app.use(cors({ origin: 'https://mwikifrontend.vercel.app', 
+              methods: ['GET', 'POST', 'OPTIONS'], 
+              credentials: true;
 
-// Handle preflight explicitly (important)
 app.options('*', cors());
 
 app.use(express.json());
 app.use(express.static('public'));
 
-/* ------------------ MOCK USERS ------------------ */
 const users = [
   {
     username: 'test',
@@ -28,7 +21,6 @@ const users = [
   }
 ];
 
-/* ------------------ ROUTES ------------------ */
 
 app.post('/api/login', async (req, res) => {
   const { username, pin } = req.body;
