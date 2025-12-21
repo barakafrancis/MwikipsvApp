@@ -18,7 +18,7 @@ app.options('*', cors());
 // --- Sample ---
 const users = [
   {
-    username: 'test',
+    username: 'compweb',
     pinHash: bcrypt.hashSync('1234', 10)
   }
 ];
@@ -116,7 +116,6 @@ app.post('/api/updateContribution', (req, res) => {
   }
 });
 
-// --- Start server ---
 app.listen(port, () => {
   console.log(`✅ Server running on port ${port}`);
 });
