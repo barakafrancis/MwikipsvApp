@@ -5,17 +5,22 @@ const cors = require('cors');
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.use(cors({
-  origin: 'https://mwikifrontend.vercel.app',
-  methods: ['GET', 'POST', 'OPTIONS'],
-  credentials: true
-}));
-
-app.options('*', cors());
-
+// --- Middleware setup ---
 app.use(express.json());
 app.use(express.static('public'));
 
+// ✅ Configure CORS properly
+app.use(cors({
+  origin: 'https://mwikifrontend.vercel.app',
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+}));
+
+// ✅ Handle preflight requests globally
+app.options('*', cors());
+
+// --- Mock user data ---
 const users = [
   {
     username: 'test',
@@ -23,78 +28,101 @@ const users = [
   }
 ];
 
+// --- Routes ---
+
 // Login route
 app.post('/api/login', async (req, res) => {
-  const { username, pin } = req.body;
+  try {
+    const { username, pin } = req.body;
 
-  if (!username || !pin) {
-    return res.status(400).json({
-      success: false,
-      message: 'Missing credentials'
-    });
+    if (!username || !pin) {
+      return res.status(400).json({
+        success: false,
+        message: 'Missing credentials'
+      });
+    }
+
+    const user = users.find(u => u.username === username);
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid credentials'
+      });
+    }
+
+    const match = await bcrypt.compare(pin, user.pinHash);
+    if (!match) {
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid credentials'
+      });
+    }
+
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Login error:', err);
+    res.status(500).json({ success: false, message: 'Server error' });
   }
-
-  const user = users.find(u => u.username === username);
-  if (!user) {
-    return res.status(401).json({
-      success: false,
-      message: 'Invalid credentials'
-    });
-  }
-
-  const match = await bcrypt.compare(pin, user.pinHash);
-  if (!match) {
-    return res.status(401).json({
-      success: false,
-      message: 'Invalid credentials'
-    });
-  }
-
-  res.json({ success: true });
 });
 
 // Forgot password route
 app.post('/api/forgotPassword', (req, res) => {
-  const { username } = req.body;
-  res.json({
-    success: true,
-    message: `Password reset requested for ${username}`
-  });
+  try {
+    const { username } = req.body;
+    res.json({
+      success: true,
+      message: `Password reset requested for ${username}`
+    });
+  } catch (err) {
+    console.error('Forgot password error:', err);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
 });
 
 // Vehicle details route
 app.get('/api/vehicleDetails', (req, res) => {
-  const { registration } = req.query;
+  try {
+    const { registration } = req.query;
 
-  if (registration === 'KAB123C') {
-    return res.json({
-      registration,
-      dailyContribution: 500,
-      monthlyFee: 2000,
-      insuranceStatus: 'Active'
+    if (registration === 'KAB123C') {
+      return res.json({
+        registration,
+        dailyContribution: 500,
+        monthlyFee: 2000,
+        insuranceStatus: 'Active'
+      });
+    }
+
+    res.status(404).json({
+      success: false,
+      error: 'Vehicle details not found'
     });
+  } catch (err) {
+    console.error('Vehicle details error:', err);
+    res.status(500).json({ success: false, message: 'Server error' });
   }
-
-  res.status(404).json({
-    success: false,
-    error: 'Vehicle details not found'
-  });
 });
 
 // Update contribution route
 app.post('/api/updateContribution', (req, res) => {
-  const { registration } = req.body;
+  try {
+    const { registration } = req.body;
 
-  if (!registration) {
-    return res.status(400).json({
-      success: false,
-      message: 'Missing registration'
-    });
+    if (!registration) {
+      return res.status(400).json({
+        success: false,
+        message: 'Missing registration'
+      });
+    }
+
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Update contribution error:', err);
+    res.status(500).json({ success: false, message: 'Server error' });
   }
-
-  res.json({ success: true });
 });
 
+// --- Start server ---
 app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
+  console.log(`✅ Server running on port ${port}`);
 });
