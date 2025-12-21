@@ -5,14 +5,12 @@ const cors = require('cors');
 const app = express();
 const port = process.env.PORT || 3000;
 
-// ✅ Fix: properly close the CORS options object
 app.use(cors({
   origin: 'https://mwikifrontend.vercel.app',
   methods: ['GET', 'POST', 'OPTIONS'],
   credentials: true
 }));
 
-// ✅ Handle preflight requests globally
 app.options('*', cors());
 
 app.use(express.json());
@@ -79,7 +77,7 @@ app.get('/api/vehicleDetails', (req, res) => {
 
   res.status(404).json({
     success: false,
-    error: 'Vehicle not found'
+    error: 'Vehicle details not found'
   });
 });
 
@@ -98,5 +96,5 @@ app.post('/api/updateContribution', (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`✅ Server running on port ${port}`);
+  console.log(`Server running on port ${port}`);
 });
