@@ -10,26 +10,26 @@
     <div class="container">
         <h1>EzzyBooks</h1>
         
-        <div class="loginForm">
+        <form id="loginForm" class="loginForm">
             <div class="form-group">
                 <label for="username">username</label>
-                <input type="text" id="username" name="username" placeholder="Enter username">
+                <input type="text" id="username" name="username" placeholder="Enter username" required>
             </div>
             
             <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="pin" name="pin" placeholder="Enter your password">
+                <label for="pin">Password</label>
+                <input type="password" id="pin" name="pin" placeholder="Enter your password" required>
             </div>
             
-            <button class="submit" type="button">Login</button>
+            <button type="submit" class="submit">Login</button>
             
             <div class="form-options">
                 <label class="remember-me">
                     <input type="checkbox" checked> Remember Me
                 </label>
-                <a href="#" class="forgot-password">Forgot Password?</a>
+                <a href="#" id="forgotPassword" class="forgot-password">Forgot Password?</a>
             </div>
-        </div>
+        </form>
         
         <div class="login-footer">
             <p>Need help? <a href="#">Contact Support</a></p>
@@ -39,4 +39,3 @@
     <script src="script.js"></script>
 </body>
 </html>
-
