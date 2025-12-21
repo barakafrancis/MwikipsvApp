@@ -1,52 +1,69 @@
 const express = require('express');
-const bodyParser = require('body-parser');
+const bcrypt = require('bcryptjs');
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.use(bodyParser.json());
-app.use(express.static('public')); // Serve static files from 'public' folder
+app.use(express.json());
+app.use(express.static('public'));
 
-app.post('/api/login', (req, res) => {
-    const { username, pin } = req.body;
+// Mock user (replace with DB)
+const users = [
+  {
+    username: 'test',
+    pinHash: bcrypt.hashSync('1234', 10)
+  }
+];
 
-    if (username === 'test' && pin === '1234') {
-        res.json({ success: true });
-    } else {
-        res.json({ success: false, message: 'Invalid credentials' });
-    }
+app.post('/api/login', async (req, res) => {
+  const { username, pin } = req.body;
+
+  if (!username || !pin) {
+    return res.status(400).json({ success: false, message: 'Missing credentials' });
+  }
+
+  const user = users.find(u => u.username === username);
+  if (!user) {
+    return res.status(401).json({ success: false, message: 'Invalid credentials' });
+  }
+
+  const match = await bcrypt.compare(pin, user.pinHash);
+  if (!match) {
+    return res.status(401).json({ success: false, message: 'Invalid credentials' });
+  }
+
+  res.json({ success: true });
 });
 
 app.post('/api/forgotPassword', (req, res) => {
-    const { username } = req.body;
-    // Stub: Simulate reset request
-    res.json({ message: `Password reset requested for ${username}. Check your email.` });
+  const { username } = req.body;
+  res.json({ message: `Password reset requested for ${username}` });
 });
 
 app.get('/api/vehicleDetails', (req, res) => {
-    const { registration } = req.query;
-    // Stub: Mock data
-    if (registration === 'KAB123C') {
-        res.json({
-            registration,
-            dailyContribution: '500',
-            monthlyFee: '2000',
-            insuranceStatus: 'Active'
-        });
-    } else {
-        res.json({ error: 'Vehicle not found' });
-    }
+  const { registration } = req.query;
+
+  if (registration === 'KAB123C') {
+    return res.json({
+      registration,
+      dailyContribution: 500,
+      monthlyFee: 2000,
+      insuranceStatus: 'Active'
+    });
+  }
+
+  res.status(404).json({ error: 'Vehicle not found' });
 });
 
 app.post('/api/updateContribution', (req, res) => {
-    const { registration, dailyContribution, monthlyFee, insuranceStatus } = req.body;
+  const { registration } = req.body;
 
-    res.json({ success: true });
+  if (!registration) {
+    return res.status(400).json({ success: false, message: 'Missing registration' });
+  }
+
+  res.json({ success: true });
 });
 
-module.exports = app;
-
-if (require.main === module) {
-    app.listen(port, () => {
-        console.log(`Server running on port ${port}`);
-    });
-}
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
+});
