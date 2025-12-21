@@ -1,0 +1,29 @@
+<!-- public/vehicle.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mwiki PSV App - Vehicle Registration</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Mwiki Sacco - Vehicle Details</h1>
+        <form id="vehicleForm">
+            <label for="registration">Vehicle Registration Number:</label>
+            <input type="text" id="registration" required>
+            
+            <button type="button" id="confirmBtn">Confirm</button>
+        </form>
+        
+        <div id="detailsSection" style="display: none;">
+            <h2>Contribution Details</h2>
+            <div id="detailsContent"></div>
+            <button type="button" id="editBtn">Edit</button>
+            <button type="button" id="submitBtn">Submit</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

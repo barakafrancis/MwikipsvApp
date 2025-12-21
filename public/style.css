@@ -1,0 +1,78 @@
+/* public/styles.css */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #FFFFFF;
+    color: #FF5722;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+.container {
+    background-color: #FFFFFF;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+h1 {
+    color: #FF5722;
+}
+
+label {
+    display: block;
+    margin: 1rem 0 0.5rem;
+    color: #FF5722;
+}
+
+input {
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid #FF5722;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+button {
+    background-color: #FF5722;
+    color: #FFFFFF;
+    border: none;
+    padding: 0.75rem;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 1rem;
+}
+
+button:hover {
+    background-color: #E64A19;
+}
+
+a {
+    color: #FF5722;
+    text-decoration: none;
+    display: block;
+    margin-top: 1rem;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+#detailsContent {
+    text-align: left;
+    margin-bottom: 1rem;
+}
+
+@media (max-width: 600px) {
+    .container {
+        padding: 1rem;
+        max-width: 90%;
+    }
+}
