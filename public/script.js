@@ -93,19 +93,19 @@ if (document.getElementById('vehicleForm')) {
         }
         
         if (!isEditing) {
-            // Enter edit mode
+            //Edit mode
             isEditing = true;
             editBtn.classList.add('editing');
             submitBtn.textContent = 'Save';
             submitBtn.classList.add('save-mode');
             displayDetails(vehicleData, true);
-            showMessage('Edit mode enabled. Make your changes and click Save.', 'info');
+            showMessage('Edit mode enabled. Make changes and click Save.', 'info');
         }
     });
 
     submitBtn.addEventListener('click', async () => {
         if (isEditing) {
-            // Collect edited values
+            // Updated values
             const updatedData = {};
             let hasChanges = false;
             
@@ -266,14 +266,6 @@ if (document.getElementById('vehicleForm')) {
         }
     }
     
-    function formatKey(key) {
-        return key
-            .replace(/([A-Z])/g, ' $1')
-            .replace(/_/g, ' ')
-            .replace(/^./, str => str.toUpperCase())
-            .trim();
-    }
-    
     function resetToViewMode() {
         isEditing = false;
         editBtn.classList.remove('editing');
@@ -290,11 +282,7 @@ if (document.getElementById('vehicleForm')) {
                 const formattedKey = formatKey(key);
                 message += `${formattedKey}: ${updatedData[key]}\n`;
             }
-        }
-        
-        // Show as alert (you can replace this with a custom modal/toast)
-        alert(message);
-        
+        }       
         // Alternative: Show in a custom message div
         showMessage('Submission successful!', 'success');
     }
@@ -337,7 +325,7 @@ if (document.getElementById('vehicleForm')) {
         } else {
             container.appendChild(messageDiv);
         }
-        
+       
         // Auto-remove after 5 seconds
         setTimeout(() => {
             if (messageDiv.parentNode) {
@@ -362,3 +350,4 @@ if (document.getElementById('vehicleForm')) {
     `;
     document.head.appendChild(style);
 }
+
