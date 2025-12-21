@@ -17,7 +17,7 @@ body {
     border-radius: 12px;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
     width: 100%;
-    max-width: 420px;
+    max-width: 450px;
     text-align: left;
     border: 1px solid #eaeaea;
 }
@@ -40,8 +40,202 @@ h1 {
     font-weight: 500;
 }
 
-/* Common form styles */
-#loginForm, .vehicle-form {
+/* Vehicle form with refresh button */
+.vehicle-form {
+    margin-top: 0.5rem;
+}
+
+.registration-group {
+    margin-bottom: 1.6rem;
+}
+
+.registration-group label {
+    display: block;
+    margin: 0 0 0.4rem 0;
+    color: #555;
+    font-weight: 500;
+    font-size: 0.9rem;
+    text-transform: lowercase;
+}
+
+.input-with-refresh {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+#registration {
+    width: 100%;
+    padding: 0.85rem;
+    padding-right: 3rem;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+    background-color: #f9fafb;
+}
+
+#registration:focus {
+    outline: none;
+    border-color: #1a73e8;
+    background-color: #fff;
+    box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.1);
+}
+
+#registration::placeholder {
+    color: #9ca3af;
+    font-size: 0.9rem;
+}
+
+.refresh-btn {
+    position: absolute;
+    right: 0.5rem;
+    background: transparent;
+    border: none;
+    color: #1a73e8;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    width: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.refresh-btn:hover {
+    color: #0d62d9;
+    background-color: rgba(26, 115, 232, 0.1);
+    transform: rotate(90deg);
+}
+
+.refresh-btn i {
+    font-size: 1rem;
+}
+
+/* Details section */
+.details-section {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #eaeaea;
+}
+
+.details-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.2rem;
+}
+
+.details-header h2 {
+    color: #444;
+    font-size: 1.3rem;
+    margin: 0;
+    font-weight: 600;
+}
+
+.pencil-btn {
+    background-color: #f0f0f0;
+    color: #555;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    padding: 0.5rem 0.8rem;
+    transition: all 0.2s ease;
+    width: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pencil-btn:hover {
+    background-color: #e0e0e0;
+    color: #1a73e8;
+    transform: translateY(-1px);
+}
+
+.pencil-btn:active {
+    transform: translateY(0);
+}
+
+.pencil-btn i {
+    font-size: 0.9rem;
+}
+
+.details-content {
+    background-color: #f8f9fa;
+    padding: 1.2rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    border: 1px solid #eaeaea;
+}
+
+.details-content p {
+    margin: 0.7rem 0;
+    padding-bottom: 0.7rem;
+    border-bottom: 1px solid #eee;
+    font-size: 0.95rem;
+    color: #555;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.details-content p:last-child {
+    border-bottom: none;
+}
+
+.details-content .label {
+    font-weight: 500;
+    color: #444;
+    min-width: 120px;
+}
+
+.details-content .value {
+    text-align: right;
+    flex-grow: 1;
+}
+
+.details-content input {
+    padding: 0.5rem;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    font-size: 0.95rem;
+    width: 60%;
+    text-align: right;
+}
+
+/* Submit button container */
+.submit-container {
+    margin-top: 1.5rem;
+}
+
+.submit-btn {
+    background-color: #34a853;
+    color: white;
+    border: none;
+    padding: 0.9rem;
+    border-radius: 6px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.submit-btn:hover {
+    background-color: #2d9450;
+    transform: translateY(-1px);
+}
+
+.submit-btn:active {
+    transform: translateY(0);
+}
+
+/* Login page specific (keep existing) */
+#loginForm, .login-form {
     margin-top: 0.5rem;
 }
 
@@ -81,36 +275,29 @@ h1 {
     font-size: 0.9rem;
 }
 
-/* Common button styles */
-button, .action-btn {
+/* Login button */
+#loginForm button[type="submit"], .login-btn, .submit {
+    background-color: #1a73e8;
+    color: #FFFFFF;
     border: none;
     padding: 0.9rem;
     border-radius: 6px;
     cursor: pointer;
     width: 100%;
+    margin-top: 0.5rem;
     font-size: 1rem;
     font-weight: 600;
     letter-spacing: 0.3px;
     transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
-button:hover, .action-btn:hover {
+#loginForm button[type="submit"]:hover, .login-btn:hover, .submit:hover {
+    background-color: #0d62d9;
     transform: translateY(-1px);
 }
 
-button:active, .action-btn:active {
+#loginForm button[type="submit"]:active, .login-btn:active, .submit:active {
     transform: translateY(0);
-}
-
-/* Login page specific */
-#loginForm button[type="submit"], .login-btn, .submit {
-    background-color: #1a73e8;
-    color: #FFFFFF;
-    margin-top: 0.5rem;
-}
-
-#loginForm button[type="submit"]:hover, .login-btn:hover, .submit:hover {
-    background-color: #0d62d9;
 }
 
 .form-options {
@@ -145,87 +332,6 @@ button:active, .action-btn:active {
 .forgot-password:hover {
     color: #0d62d9;
     text-decoration: underline;
-}
-
-/* Vehicle page specific */
-.confirm-btn {
-    background-color: #1a73e8;
-    color: #FFFFFF;
-}
-
-.confirm-btn:hover {
-    background-color: #0d62d9;
-}
-
-.details-section {
-    margin-top: 2rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid #eaeaea;
-}
-
-.details-section h2 {
-    color: #444;
-    font-size: 1.3rem;
-    margin-bottom: 1.2rem;
-    font-weight: 600;
-}
-
-.details-content {
-    background-color: #f8f9fa;
-    padding: 1.2rem;
-    border-radius: 8px;
-    margin-bottom: 1.5rem;
-    border: 1px solid #eaeaea;
-}
-
-.details-content p {
-    margin: 0.7rem 0;
-    padding-bottom: 0.7rem;
-    border-bottom: 1px solid #eee;
-    font-size: 0.95rem;
-    color: #555;
-}
-
-.details-content p:last-child {
-    border-bottom: none;
-}
-
-.details-content input {
-    padding: 0.5rem;
-    border: 1px solid #d1d5db;
-    border-radius: 4px;
-    font-size: 0.95rem;
-    margin-left: 0.5rem;
-    width: 60%;
-}
-
-.action-buttons {
-    display: flex;
-    gap: 1rem;
-    margin-top: 1.5rem;
-}
-
-.action-btn {
-    flex: 1;
-    padding: 0.8rem;
-}
-
-.edit-btn {
-    background-color: #f0f0f0;
-    color: #555;
-}
-
-.edit-btn:hover {
-    background-color: #e0e0e0;
-}
-
-.submit-btn {
-    background-color: #34a853;
-    color: white;
-}
-
-.submit-btn:hover {
-    background-color: #2d9450;
 }
 
 /* Common footer */
@@ -264,14 +370,6 @@ button:active, .action-btn:active {
         flex-direction: column;
         gap: 0.8rem;
         align-items: flex-start;
-    }
-    
-    .action-buttons {
-        flex-direction: column;
-    }
-    
-    .action-btn {
-        width: 100%;
     }
     
     .details-content input {
