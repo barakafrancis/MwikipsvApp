@@ -6,7 +6,6 @@ const port = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.static('public'));
 
-// Mock user (replace with DB)
 const users = [
   {
     username: 'test',
