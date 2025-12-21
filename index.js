@@ -18,7 +18,7 @@ app.options('*', cors());
 // --- Sample ---
 const users = [
   {
-    username: 'Moses',
+    username: 'moses',
     pinHash: bcrypt.hashSync('1234', 10)
   }
 ];
