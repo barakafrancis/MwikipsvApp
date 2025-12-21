@@ -1,3 +1,4 @@
+/* public/styles.css */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #f8f9fa;
@@ -16,21 +17,31 @@ body {
     border-radius: 12px;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
     width: 100%;
-    max-width: 380px;
+    max-width: 420px;
     text-align: left;
     border: 1px solid #eaeaea;
 }
 
+/* Common heading styles */
 h1 {
     color: #1a73e8;
     font-size: 2.2rem;
     font-weight: 700;
-    margin: 0 0 1.8rem 0;
+    margin: 0 0 1rem 0;
     text-align: center;
     letter-spacing: -0.5px;
 }
 
-.login-form {
+.subtitle {
+    color: #666;
+    font-size: 1rem;
+    text-align: center;
+    margin-bottom: 2rem;
+    font-weight: 500;
+}
+
+/* Common form styles */
+#loginForm, .vehicle-form {
     margin-top: 0.5rem;
 }
 
@@ -49,7 +60,7 @@ h1 {
 
 .form-group input {
     width: 100%;
-    padding: 0.8rem;
+    padding: 0.85rem;
     border: 1px solid #d1d5db;
     border-radius: 6px;
     box-sizing: border-box;
@@ -70,28 +81,36 @@ h1 {
     font-size: 0.9rem;
 }
 
-button.login-btn {
-    background-color: #1a73e8;
-    color: #FFFFFF;
+/* Common button styles */
+button, .action-btn {
     border: none;
     padding: 0.9rem;
     border-radius: 6px;
     cursor: pointer;
     width: 100%;
-    margin-top: 0.5rem;
     font-size: 1rem;
     font-weight: 600;
     letter-spacing: 0.3px;
     transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
-button.login-btn:hover {
-    background-color: #0d62d9;
+button:hover, .action-btn:hover {
     transform: translateY(-1px);
 }
 
-button.login-btn:active {
+button:active, .action-btn:active {
     transform: translateY(0);
+}
+
+/* Login page specific */
+#loginForm button[type="submit"], .login-btn, .submit {
+    background-color: #1a73e8;
+    color: #FFFFFF;
+    margin-top: 0.5rem;
+}
+
+#loginForm button[type="submit"]:hover, .login-btn:hover, .submit:hover {
+    background-color: #0d62d9;
 }
 
 .form-options {
@@ -128,6 +147,88 @@ button.login-btn:active {
     text-decoration: underline;
 }
 
+/* Vehicle page specific */
+.confirm-btn {
+    background-color: #1a73e8;
+    color: #FFFFFF;
+}
+
+.confirm-btn:hover {
+    background-color: #0d62d9;
+}
+
+.details-section {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #eaeaea;
+}
+
+.details-section h2 {
+    color: #444;
+    font-size: 1.3rem;
+    margin-bottom: 1.2rem;
+    font-weight: 600;
+}
+
+.details-content {
+    background-color: #f8f9fa;
+    padding: 1.2rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    border: 1px solid #eaeaea;
+}
+
+.details-content p {
+    margin: 0.7rem 0;
+    padding-bottom: 0.7rem;
+    border-bottom: 1px solid #eee;
+    font-size: 0.95rem;
+    color: #555;
+}
+
+.details-content p:last-child {
+    border-bottom: none;
+}
+
+.details-content input {
+    padding: 0.5rem;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    font-size: 0.95rem;
+    margin-left: 0.5rem;
+    width: 60%;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.action-btn {
+    flex: 1;
+    padding: 0.8rem;
+}
+
+.edit-btn {
+    background-color: #f0f0f0;
+    color: #555;
+}
+
+.edit-btn:hover {
+    background-color: #e0e0e0;
+}
+
+.submit-btn {
+    background-color: #34a853;
+    color: white;
+}
+
+.submit-btn:hover {
+    background-color: #2d9450;
+}
+
+/* Common footer */
 .login-footer {
     margin-top: 2rem;
     padding-top: 1.2rem;
@@ -147,20 +248,16 @@ button.login-btn:active {
     text-decoration: underline;
 }
 
-#detailsContent {
-    text-align: left;
-    margin-bottom: 1rem;
-}
-
+/* Responsive design */
 @media (max-width: 600px) {
     .container {
         padding: 2rem 1.5rem;
-        max-width: 90%;
+        max-width: 95%;
     }
     
     h1 {
         font-size: 1.9rem;
-        margin-bottom: 1.5rem;
+        margin-bottom: 0.8rem;
     }
     
     .form-options {
@@ -168,5 +265,16 @@ button.login-btn:active {
         gap: 0.8rem;
         align-items: flex-start;
     }
+    
+    .action-buttons {
+        flex-direction: column;
+    }
+    
+    .action-btn {
+        width: 100%;
+    }
+    
+    .details-content input {
+        width: 55%;
+    }
 }
-
