@@ -1,4 +1,3 @@
-// Login Handling
 if (document.getElementById('loginForm')) {
     const loginForm = document.getElementById('loginForm');
     const forgotPassword = document.getElementById('forgotPassword');
@@ -16,7 +15,7 @@ if (document.getElementById('loginForm')) {
             });
             const data = await response.json();
             if (data.success) {
-                     //vehiclepage
+                // Redirect to vehicle page on success
                 window.location.href = '/vehicle.html';
             } else {
                 alert('Login failed: ' + data.message);
@@ -45,7 +44,6 @@ if (document.getElementById('loginForm')) {
     });
 }
 
-// Vehicle Form Handler
 if (document.getElementById('vehicleForm')) {
     const confirmBtn = document.getElementById('confirmBtn');
     const editBtn = document.getElementById('editBtn');
@@ -54,31 +52,20 @@ if (document.getElementById('vehicleForm')) {
     const detailsContent = document.getElementById('detailsContent');
     let isEditing = false;
     let vehicleData = {};
-    let originalVehicleData = {};
 
     confirmBtn.addEventListener('click', async () => {
-        const registration = document.getElementById('registration').value.trim();
-        if (!registration) {
-            alert('Please enter a vehicle registration number');
-            return;
-        }
-        
+        const registration = document.getElementById('registration').value;
         try {
             const response = await fetch(`/api/vehicleDetails?registration=${encodeURIComponent(registration)}`);
             vehicleData = await response.json();
-            
             if (vehicleData.error) {
                 alert('Error: ' + vehicleData.error);
-                detailsSection.style.display = 'none';
                 return;
             }
-            
-            // Store original data
-            originalVehicleData = { ...vehicleData };
-            
             displayDetails(vehicleData);
             detailsSection.style.display = 'block';
-            resetEditState();
+            // Reset to initial state
+            resetToViewMode();
         } catch (error) {
             alert('Error fetching vehicle details: ' + error.message);
         }
@@ -90,69 +77,38 @@ if (document.getElementById('vehicleForm')) {
             return;
         }
         
-        isEditing = !isEditing; // Toggle edit mode
-        
-        if (isEditing) {
+        if (!isEditing) {
             // Enter edit mode
+            isEditing = true;
             editBtn.classList.add('editing');
             submitBtn.textContent = 'Save';
             submitBtn.classList.add('save-mode');
             displayDetails(vehicleData, true);
-        } else {
-            // Cancel edit mode
-            resetEditState();
-            displayDetails(vehicleData);
         }
     });
 
     submitBtn.addEventListener('click', async () => {
         if (isEditing) {
-            // In edit mode - save changes
-            const updatedData = {};
-            let hasChanges = false;
-            
             // Collect edited values
+            const updatedData = {};
             for (const key in vehicleData) {
                 if (key !== 'registration') {
                     const input = document.getElementById(`edit-${key}`);
-                    if (input) {
-                        const newValue = input.value.trim();
-                        if (newValue !== vehicleData[key]) {
-                            updatedData[key] = newValue;
-                            hasChanges = true;
-                        }
-                    }
+                    if (input) updatedData[key] = input.value;
                 }
             }
-            
-            if (!hasChanges) {
-                alert('No changes detected');
-                resetEditState();
-                displayDetails(vehicleData);
-                return;
-            }
-            
             try {
                 const response = await fetch('/api/updateContribution', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ 
-                        registration: vehicleData.registration, 
-                        ...updatedData 
-                    })
+                    body: JSON.stringify({ registration: vehicleData.registration, ...updatedData })
                 });
-                
                 const data = await response.json();
                 if (data.success) {
                     alert('Contribution updated successfully');
-                    
-                    // Update local data
                     vehicleData = { ...vehicleData, ...updatedData };
-                    originalVehicleData = { ...vehicleData };
-                    
                     // Exit edit mode
-                    isEditing = false;
-                    resetEditState();
+                    resetToViewMode();
                     displayDetails(vehicleData);
                 } else {
                     alert('Update failed: ' + data.message);
@@ -161,25 +117,21 @@ if (document.getElementById('vehicleForm')) {
                 alert('Error updating contribution: ' + error.message);
             }
         } else {
-            // Not in edit mode - just show message
-            alert('Click the pencil icon to edit details');
+            // Not in edit mode - show helpful message
+            alert('Click the pencil icon to edit contribution details');
         }
     });
 
     function displayDetails(data, edit = false) {
         detailsContent.innerHTML = '';
-        
         for (const key in data) {
             if (key !== 'registration') {
                 const p = document.createElement('p');
-                
                 if (edit) {
-                    // Create label
                     const labelSpan = document.createElement('span');
                     labelSpan.className = 'label';
                     labelSpan.textContent = `${formatKey(key)}:`;
                     
-                    // Create input field
                     const input = document.createElement('input');
                     input.type = 'text';
                     input.id = `edit-${key}`;
@@ -200,7 +152,6 @@ if (document.getElementById('vehicleForm')) {
                     p.appendChild(labelSpan);
                     p.appendChild(valueSpan);
                 }
-                
                 detailsContent.appendChild(p);
             }
         }
@@ -215,11 +166,10 @@ if (document.getElementById('vehicleForm')) {
             .trim();
     }
     
-    function resetEditState() {
+    function resetToViewMode() {
         isEditing = false;
         editBtn.classList.remove('editing');
         submitBtn.textContent = 'Submit';
         submitBtn.classList.remove('save-mode');
     }
 }
-
