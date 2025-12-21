@@ -2,7 +2,7 @@
   "name": "mwikipsvapp",
   "version": "1.0.0",
   "description": "Mwiki Sacco Web App",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "start": "node index.js"
   },
