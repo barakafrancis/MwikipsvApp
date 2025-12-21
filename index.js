@@ -5,13 +5,9 @@ const cors = require('cors');
 const app = express();
 const port = process.env.PORT || 3000;
 
-/**
- * ✅ CORS CONFIG
- * Replace the frontend URL with your real one
- */
 app.use(cors({
   origin: [
-    'https://mwikifrontend-e480mfc83-francis-barakas-projects.vercel.app'
+    'https://mwikifrontend.vercel.app'
   ],
   methods: ['GET', 'POST', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
