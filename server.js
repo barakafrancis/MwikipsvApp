@@ -8,7 +8,7 @@ app.use(express.static('public')); // Serve static files from 'public' folder
 
 app.post('/api/login', (req, res) => {
     const { username, pin } = req.body;
-    // Stub: Check against mock
+
     if (username === 'test' && pin === '1234') {
         res.json({ success: true });
     } else {
