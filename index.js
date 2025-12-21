@@ -5,10 +5,14 @@ const cors = require('cors');
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.use(cors({ origin: 'https://mwikifrontend.vercel.app', 
-              methods: ['GET', 'POST', 'OPTIONS'], 
-              credentials: true;
+// ✅ Fix: properly close the CORS options object
+app.use(cors({
+  origin: 'https://mwikifrontend.vercel.app',
+  methods: ['GET', 'POST', 'OPTIONS'],
+  credentials: true
+}));
 
+// ✅ Handle preflight requests globally
 app.options('*', cors());
 
 app.use(express.json());
@@ -21,7 +25,7 @@ const users = [
   }
 ];
 
-
+// Login route
 app.post('/api/login', async (req, res) => {
   const { username, pin } = req.body;
 
@@ -51,6 +55,7 @@ app.post('/api/login', async (req, res) => {
   res.json({ success: true });
 });
 
+// Forgot password route
 app.post('/api/forgotPassword', (req, res) => {
   const { username } = req.body;
   res.json({
@@ -59,6 +64,7 @@ app.post('/api/forgotPassword', (req, res) => {
   });
 });
 
+// Vehicle details route
 app.get('/api/vehicleDetails', (req, res) => {
   const { registration } = req.query;
 
@@ -77,6 +83,7 @@ app.get('/api/vehicleDetails', (req, res) => {
   });
 });
 
+// Update contribution route
 app.post('/api/updateContribution', (req, res) => {
   const { registration } = req.body;
 
