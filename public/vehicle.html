@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EzzyBooks - Vehicle Details</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -12,21 +13,29 @@
         <p class="subtitle">Vehicle Contribution Details</p>
         
         <form id="vehicleForm" class="vehicle-form">
-            <div class="form-group">
+            <div class="form-group registration-group">
                 <label for="registration">vehicle registration number</label>
-                <input type="text" id="registration" name="registration" placeholder="Enter registration number" required>
+                <div class="input-with-refresh">
+                    <input type="text" id="registration" name="registration" placeholder="Enter registration number" required>
+                    <button type="button" id="confirmBtn" class="refresh-btn" title="Refresh">
+                        <i class="fas fa-redo-alt"></i>
+                    </button>
+                </div>
             </div>
-            
-            <button type="button" id="confirmBtn" class="confirm-btn">Confirm</button>
         </form>
         
         <div id="detailsSection" class="details-section" style="display: none;">
-            <h2>Contribution Details</h2>
+            <div class="details-header">
+                <h2>Contribution Details</h2>
+                <button type="button" id="editBtn" class="pencil-btn" title="Edit">
+                    <i class="fas fa-pencil-alt"></i>
+                </button>
+            </div>
+            
             <div id="detailsContent" class="details-content"></div>
             
-            <div class="action-buttons">
-                <button type="button" id="editBtn" class="action-btn edit-btn">Edit</button>
-                <button type="button" id="submitBtn" class="action-btn submit-btn">Submit</button>
+            <div class="submit-container">
+                <button type="button" id="submitBtn" class="submit-btn">Submit</button>
             </div>
         </div>
     </div>
