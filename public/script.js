@@ -80,7 +80,7 @@ if (document.getElementById('vehicleForm')) {
             resetToViewMode();
             
             // Show success message
-            showMessage('Vehicle details loaded successfully', 'success');
+            showMessage('Vehicle details loaded', 'success');
         } catch (error) {
             alert('Error fetching vehicle details: ' + error.message);
         }
@@ -99,7 +99,7 @@ if (document.getElementById('vehicleForm')) {
             submitBtn.textContent = 'Save';
             submitBtn.classList.add('save-mode');
             displayDetails(vehicleData, true);
-            showMessage('Edit mode enabled. Make changes and click Save.', 'info');
+            showMessage('Make changes and click Save.', 'info');
         }
     });
 
@@ -222,7 +222,7 @@ if (document.getElementById('vehicleForm')) {
             originalVehicleData = { ...vehicleData };
             displayDetails(vehicleData);
             detailsSection.style.display = 'block';
-            showMessage('Vehicle details refreshed', 'success');
+            showMessage('Vehicle details updated', 'success');
         } catch (error) {
             alert('Error fetching vehicle details: ' + error.message);
         }
@@ -274,7 +274,7 @@ if (document.getElementById('vehicleForm')) {
     }
     
     function showSubmittedMessage(updatedData) {
-        let message = '✓ Submitted Successfully!\n\n';
+        let message = 'Submitted Successfully!\n\n';
         message += 'Saved Values:\n';
         
         for (const key in updatedData) {
@@ -284,7 +284,7 @@ if (document.getElementById('vehicleForm')) {
             }
         }       
         // Alternative: Show in a custom message div
-        showMessage('Submission successful!', 'success');
+        showMessage('update successful!', 'success');
     }
     
     function showMessage(text, type = 'info') {
@@ -356,5 +356,6 @@ if (document.getElementById('vehicleForm')) {
     `;
     document.head.appendChild(style);
 }
+
 
 
