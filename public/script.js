@@ -52,6 +52,7 @@ if (document.getElementById('vehicleForm')) {
     const detailsContent = document.getElementById('detailsContent');
     const registrationInput = document.getElementById('registration');
     let isEditing = false;
+    let hasUnsavedChanges = false;
     let vehicleData = {};
     let originalVehicleData = {};
 
@@ -78,6 +79,7 @@ if (document.getElementById('vehicleForm')) {
             displayDetails(vehicleData);
             detailsSection.style.display = 'block';
             resetToViewMode();
+            hasUnsavedChanges = false;
             
             // Show success message
             showMessage('Vehicle details loaded', 'success');
@@ -93,117 +95,187 @@ if (document.getElementById('vehicleForm')) {
         }
         
         if (!isEditing) {
-            //Edit mode
+            // Enter edit mode
             isEditing = true;
+            hasUnsavedChanges = false;
             editBtn.classList.add('editing');
             submitBtn.textContent = 'Save';
             submitBtn.classList.add('save-mode');
             displayDetails(vehicleData, true);
-            showMessage('Make changes and click Save.', 'info');
+            showMessage('Make changes and click Save to update.', 'info');
+        } else {
+            // Cancel edit mode
+            isEditing = false;
+            editBtn.classList.remove('editing');
+            submitBtn.textContent = 'Submit';
+            submitBtn.classList.remove('save-mode');
+            displayDetails(vehicleData);
+            showMessage('Edit cancelled.', 'info');
         }
     });
 
     submitBtn.addEventListener('click', async () => {
         if (isEditing) {
-            // Updated values
-            const updatedData = {};
-            let hasChanges = false;
-            
-            for (const key in vehicleData) {
-                if (key !== 'registration') {
-                    const input = document.getElementById(`edit-${key}`);
-                    if (input) {
-                        const newValue = input.value.trim();
-                        if (newValue !== vehicleData[key]) {
-                            updatedData[key] = newValue;
-                            hasChanges = true;
-                        }
-                    }
-                }
-            }
-            
-            if (!hasChanges) {
-                showMessage('No changes detected', 'info');
-                resetToViewMode();
-                displayDetails(vehicleData);
-                return;
-            }
-            
-            try {
-                // Show loading state
-                submitBtn.textContent = 'Saving...';
-                submitBtn.disabled = true;
-                
-                const response = await fetch('/api/updateContribution', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ 
-                        registration: vehicleData.registration, 
-                        ...updatedData 
-                    })
-                });
-                
-                const data = await response.json();
-                if (data.success) {
-                    // Update local data with saved values
-                    vehicleData = { ...vehicleData, ...updatedData };
-                    originalVehicleData = { ...vehicleData };
-                    
-                    // Show submitted message with saved values
-                    showSubmittedMessage(updatedData);
-                    
-                    // Refresh and display the saved data
-                    resetToViewMode();
-                    displayDetails(vehicleData);
-                    
-                    // Refresh registration number if needed
-                    if (data.updatedRegistration) {
-                        registrationInput.value = data.updatedRegistration;
-                    }
-                } else {
-                    alert('Update failed: ' + data.message);
-                }
-            } catch (error) {
-                alert('Error updating contribution: ' + error.message);
-            } finally {
-                // Reset button state
-                submitBtn.disabled = false;
-            }
+            // We're in edit mode, so save the changes first
+            await saveChanges();
         } else {
-            // Not in edit mode - submit the current data
-            try {
-                submitBtn.textContent = 'Submitting...';
-                submitBtn.disabled = true;
-                
-                const response = await fetch('/api/submitContribution', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(vehicleData)
-                });
-                
-                const data = await response.json();
-                if (data.success) {
-                    showSubmittedMessage(vehicleData);
-                } else {
-                    alert('Submission failed: ' + data.message);
-                }
-            } catch (error) {
-                alert('Error submitting contribution: ' + error.message);
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'Submit';
-            }
+            // Not in edit mode, submit the contribution
+            await submitContribution();
         }
     });
 
-    // Add event listener for refresh icon to clear and refetch
+    async function saveChanges() {
+        // Collect edited values
+        const updatedData = {};
+        let hasChanges = false;
+        
+        for (const key in vehicleData) {
+            if (key !== 'registration') {
+                const input = document.getElementById(`edit-${key}`);
+                if (input) {
+                    const newValue = input.value.trim();
+                    if (newValue !== vehicleData[key]) {
+                        updatedData[key] = newValue;
+                        hasChanges = true;
+                    }
+                }
+            }
+        }
+        
+        if (!hasChanges) {
+            showMessage('No changes detected', 'info');
+            // Exit edit mode since no changes
+            isEditing = false;
+            editBtn.classList.remove('editing');
+            submitBtn.textContent = 'Submit';
+            submitBtn.classList.remove('save-mode');
+            displayDetails(vehicleData);
+            return;
+        }
+        
+        try {
+            // Show loading state
+            submitBtn.textContent = 'Saving...';
+            submitBtn.disabled = true;
+            
+            const response = await fetch('/api/updateContribution', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    registration: vehicleData.registration, 
+                    ...updatedData 
+                })
+            });
+            
+            const data = await response.json();
+            if (data.success) {
+                // Update local data with saved values
+                vehicleData = { ...vehicleData, ...updatedData };
+                originalVehicleData = { ...vehicleData };
+                
+                // Mark changes as saved
+                hasUnsavedChanges = false;
+                
+                // Exit edit mode
+                isEditing = false;
+                editBtn.classList.remove('editing');
+                submitBtn.textContent = 'Submit';
+                submitBtn.classList.remove('save-mode');
+                
+                // Refresh display
+                displayDetails(vehicleData);
+                
+                // Show success message
+                showMessage('Changes saved successfully! Click Submit to finalize.', 'success');
+                
+                // Show saved values in alert
+                let alertMessage = '✓ Changes Saved Successfully!\n\nUpdated Values:\n';
+                for (const key in updatedData) {
+                    const formattedKey = formatKey(key);
+                    alertMessage += `${formattedKey}: ${updatedData[key]}\n`;
+                }
+                alert(alertMessage);
+                
+            } else {
+                alert('Save failed: ' + data.message);
+            }
+        } catch (error) {
+            alert('Error saving changes: ' + error.message);
+        } finally {
+            // Reset button state
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Save';
+        }
+    }
+
+    async function submitContribution() {
+        if (!vehicleData || Object.keys(vehicleData).length === 0) {
+            alert('Please load vehicle details first');
+            return;
+        }
+        
+        // Confirm submission
+        const confirmSubmit = confirm('Submit this contribution? This action cannot be undone.');
+        if (!confirmSubmit) {
+            return;
+        }
+        
+        try {
+            // Show loading state
+            submitBtn.textContent = 'Submitting...';
+            submitBtn.disabled = true;
+            
+            const response = await fetch('/api/updateContribution', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(vehicleData)
+            });
+            
+            const data = await response.json();
+            if (data.success) {
+                // Show success message
+                showMessage('Contribution submitted successfully!', 'success');
+                
+                // Show submitted values in alert
+                let alertMessage = '✓ Contribution Submitted Successfully!\n\nSubmitted Values:\n';
+                for (const key in vehicleData) {
+                    if (key !== 'registration') {
+                        const formattedKey = formatKey(key);
+                        alertMessage += `${formattedKey}: ${vehicleData[key]}\n`;
+                    }
+                }
+                alert(alertMessage);
+                
+                // Refresh the data to show latest state
+                const registration = registrationInput.value.trim();
+                if (registration) {
+                    const refreshResponse = await fetch(`/api/vehicleDetails?registration=${encodeURIComponent(registration)}`);
+                    const refreshedData = await refreshResponse.json();
+                    if (!refreshedData.error) {
+                        vehicleData = refreshedData;
+                        displayDetails(vehicleData);
+                    }
+                }
+                
+            } else {
+                alert('Submission failed: ' + data.message);
+            }
+        } catch (error) {
+            alert('Error submitting contribution: ' + error.message);
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Submit';
+        }
+    }
+
+    // Refresh functionality
     confirmBtn.addEventListener('click', async () => {
         // Clear previous data
         detailsSection.style.display = 'none';
         detailsContent.innerHTML = '';
         resetToViewMode();
+        hasUnsavedChanges = false;
         
-        // Fetch new data (rest of the existing confirmBtn logic)
         const registration = registrationInput.value.trim();
         if (!registration) {
             alert('Please enter a vehicle registration number');
@@ -273,20 +345,6 @@ if (document.getElementById('vehicleForm')) {
         submitBtn.classList.remove('save-mode');
     }
     
-    function showSubmittedMessage(updatedData) {
-        let message = 'Submitted Successfully!\n\n';
-        message += 'Saved Values:\n';
-        
-        for (const key in updatedData) {
-            if (key !== 'registration') {
-                const formattedKey = formatKey(key);
-                message += `${formattedKey}: ${updatedData[key]}\n`;
-            }
-        }       
-        // Alternative: Show in a custom message div
-        showMessage('update successful!', 'success');
-    }
-    
     function showMessage(text, type = 'info') {
         // Remove any existing message
         const existingMessage = document.querySelector('.status-message');
@@ -325,7 +383,7 @@ if (document.getElementById('vehicleForm')) {
         } else {
             container.appendChild(messageDiv);
         }
-       
+        
         // Auto-remove after 5 seconds
         setTimeout(() => {
             if (messageDiv.parentNode) {
@@ -339,13 +397,15 @@ if (document.getElementById('vehicleForm')) {
             }
         }, 5000);
     }
-        function formatKey(key) {
+    
+    function formatKey(key) {
         return key
             .replace(/([A-Z])/g, ' $1')
             .replace(/_/g, ' ')
             .replace(/^./, str => str.toUpperCase())
             .trim();
     }
+    
     // Add CSS for fadeIn animation
     const style = document.createElement('style');
     style.textContent = `
@@ -356,7 +416,3 @@ if (document.getElementById('vehicleForm')) {
     `;
     document.head.appendChild(style);
 }
-
-
-
-
