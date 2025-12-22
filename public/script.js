@@ -339,7 +339,13 @@ if (document.getElementById('vehicleForm')) {
             }
         }, 5000);
     }
-    
+        function formatKey(key) {
+        return key
+            .replace(/([A-Z])/g, ' $1')
+            .replace(/_/g, ' ')
+            .replace(/^./, str => str.toUpperCase())
+            .trim();
+    }
     // Add CSS for fadeIn animation
     const style = document.createElement('style');
     style.textContent = `
@@ -350,4 +356,5 @@ if (document.getElementById('vehicleForm')) {
     `;
     document.head.appendChild(style);
 }
+
 
