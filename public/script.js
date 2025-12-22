@@ -222,7 +222,7 @@ if (document.getElementById('vehicleForm')) {
             originalVehicleData = { ...vehicleData };
             displayDetails(vehicleData);
             detailsSection.style.display = 'block';
-            showMessage('Vehicle details updated', 'success');
+            showMessage('Vehicle details refreshed', 'success');
         } catch (error) {
             alert('Error fetching vehicle details: ' + error.message);
         }
@@ -356,6 +356,7 @@ if (document.getElementById('vehicleForm')) {
     `;
     document.head.appendChild(style);
 }
+
 
 
 
