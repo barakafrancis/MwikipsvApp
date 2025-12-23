@@ -15,7 +15,7 @@ function showInstallButton() {
   if (!installPrompt) return;
   
   const installBtn = document.createElement('button');
-  installBtn.textContent = '📱 Install App';
+  installBtn.textContent = 'Install App';
   installBtn.style.cssText = `
     position: fixed;
     bottom: 20px;
@@ -57,6 +57,6 @@ if ('serviceWorker' in navigator) {
 
 // Check if running as PWA
 if (window.matchMedia('(display-mode: standalone)').matches) {
-  console.log('Running as installed PWA');
+  console.log('PWA installed and running');
   document.documentElement.classList.add('pwa-installed');
 }
