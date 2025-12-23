@@ -6,10 +6,9 @@
     <title>EzzyBooks - Login</title>
     <link rel="stylesheet" href="styles.css">
     <!-- PWA Meta Tags -->
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#1a73e8">
-<link rel="manifest" href="/manifest.json">
-<link rel="icon" href="/icon-192.png">
+    <meta name="theme-color" content="#1a73e8">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" href="/icon-192.png">
 </head>
 <body>
     <div class="container">
@@ -41,8 +40,117 @@
         </div>
     </div>
     
+    <!-- Main JavaScript -->
     <script src="script.js"></script>
+    
+    <!-- PWA Install Script -->
+    <script>
+        // Simple PWA Install Prompt
+        let installPrompt = null;
+
+        // Listen for install prompt
+        window.addEventListener('beforeinstallprompt', (e) => {
+            console.log('beforeinstallprompt event fired');
+            e.preventDefault();
+            installPrompt = e;
+            
+            // Show install button after 5 seconds
+            setTimeout(showInstallButton, 5000);
+        });
+
+        // Create install button
+        function showInstallButton() {
+            if (!installPrompt) {
+                console.log('No install prompt available');
+                return;
+            }
+            
+            // Check if already installed
+            if (window.matchMedia('(display-mode: standalone)').matches) {
+                console.log('Already installed as PWA');
+                return;
+            }
+            
+            const installBtn = document.createElement('button');
+            installBtn.textContent = '📱 Install App';
+            installBtn.id = 'installPWA';
+            installBtn.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background: #1a73e8;
+                color: white;
+                border: none;
+                padding: 12px 20px;
+                border-radius: 25px;
+                font-weight: bold;
+                cursor: pointer;
+                z-index: 1000;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                font-size: 14px;
+            `;
+            
+            installBtn.onclick = async () => {
+                if (!installPrompt) return;
+                
+                // Show the install prompt
+                installPrompt.prompt();
+                
+                // Wait for the user to respond
+                const choiceResult = await installPrompt.userChoice;
+                
+                if (choiceResult.outcome === 'accepted') {
+                    console.log('User accepted PWA installation');
+                    installBtn.remove();
+                } else {
+                    console.log('User declined PWA installation');
+                }
+                
+                installPrompt = null;
+            };
+            
+            // Add to page
+            document.body.appendChild(installBtn);
+            
+            // Auto-remove after 30 seconds
+            setTimeout(() => {
+                if (installBtn.parentNode) {
+                    installBtn.remove();
+                }
+            }, 30000);
+        }
+
+        // Register service worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(registration => {
+                        console.log('Service Worker registered:', registration);
+                    })
+                    .catch(error => {
+                        console.log('Service Worker registration failed:', error);
+                    });
+            });
+        }
+
+        // Check if already running as PWA
+        window.addEventListener('load', () => {
+            if (window.matchMedia('(display-mode: standalone)').matches) {
+                console.log('Running as installed PWA');
+                document.documentElement.classList.add('pwa-installed');
+            }
+        });
+        
+        // Listen for app installed event
+        window.addEventListener('appinstalled', () => {
+            console.log('EzzyBooks was installed as PWA');
+            // Hide install button if it exists
+            const installBtn = document.getElementById('installPWA');
+            if (installBtn) {
+                installBtn.remove();
+            }
+        });
+    </script>
 </body>
 </html>
-
-
